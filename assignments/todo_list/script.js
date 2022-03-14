@@ -4,10 +4,10 @@ document.querySelector('.addbutton').onclick = function(){
     if(input.length === 0){
         alert('please enter the value')
     }else{
-        document.querySelector('.todos').innerHTML += `<p key=${count}><span class="tasks">${input}</span></p>`;
+        document.querySelector('.todos').innerHTML += `<p key=${count}>${input}</p>`;
         count ++
     }
-    let remover = document.querySelectorAll('.tasks')
+    let remover = document.querySelectorAll('.todos >p');
     for(let i=0; i< remover.length; i++){
         remover[i].onclick = function(){
             this.remove();
@@ -17,3 +17,21 @@ document.querySelector('.addbutton').onclick = function(){
 function removeAll(){
     document.querySelector('.todos').innerHTML = "";
 }
+async function apitodo(){
+    let res = await fetch('https://jsonplaceholder.typicode.com/todos');
+    let data = await res.json();
+    let output = '';
+    let pending = '';
+    data.forEach(function(todo, index) {
+        if(todo.completed===true){
+            output +=`<p key=${index}>${todo.title}</p>`;
+            document.querySelector('.completed').innerHTML = output;
+        }
+        else if(todo.completed===false){
+            pending +=`<p key=${index}>${todo.title}</p>`;
+            document.querySelector('.pending').innerHTML = pending;
+        }
+    });
+    
+}
+apitodo();
